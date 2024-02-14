@@ -12,9 +12,11 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import GridSearchCV
+from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import LabelEncoder
 
 def entrena_modelo(data_final):
     # Entrenamos el modelo 
