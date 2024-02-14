@@ -12,6 +12,27 @@ Este es un repositorio que contiene a detalle los scripts del modelo que permita
 
 # Contenido del repositorio  🎯
 Aqui se incluye el árbol con la estructura de tu repositorio:
+- [data](./data)
+  - [raw](./data/raw)
+    - [test.csv](./data/raw/test.csv)
+    - [train.csv](./data/raw/train.csv)
+
+- [notebooks](./notebooks)
+  - [Modelo_Tarea_01.ipynb](./notebooks/Modelo_Tarea_01.ipynb)
+
+- [src](./src)
+  - [script.py](./src/script.py)
+
+- [inference.py](./inference.py)
+- [prep.py](./prep.py)
+- [train.py](./train.py)
+
+
+
+perieba
+
+
+
 
 ├── ./README.md
 ├── ./data
