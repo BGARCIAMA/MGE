@@ -5,6 +5,9 @@
     - impute_continuous_missing_data
     - preprocesar_datos
 '''
+#path del repo
+base_path_data = "./data/raw"
+
 #Importa librerías
 import pandas as pd 
 import numpy as np
@@ -19,6 +22,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.impute import IterativeImputer
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import LabelEncoder 
 
 
 def descargar_datos(data_train,data_test):
@@ -30,8 +34,8 @@ def descargar_datos(data_train,data_test):
         Un dataframe con las dos bases unidas
     '''
     #Lee los archivos csv con los datos
-    data_train = pd.read_csv("train.csv")
-    data_test = pd.read_csv("test.csv")
+    data_train = pd.read_csv(base_path_data + "train.csv")
+    data_test = pd.read_csv(base_path_data + "test.csv")
 
     #Quita las columnas de ID
     train_sin_ID = data_train.drop('Id', axis=1)
@@ -175,5 +179,8 @@ def preprocesar_datos(data_total):
    
     data_final = var_modelo[['OverallQual', 'YearBuilt', 'YearRemodAdd', 'LotFrontage', 
                             'TotalBsmtSF', 'GrLivArea', 'GarageArea', 'SalePrice']]
+
+    #duda si ponerlo así: 
+    data_final.to_csv(base_path_data, index=False)
 
     return data_final

@@ -55,7 +55,7 @@ def entrena_modelo(data_final):
     rmse_results_sorted = dict(sorted(rmse_results.items(), key=lambda item: item[1]))
 
     # Se dividen las bases
-    df_train, df_test = train_test_split(data_final, test_size=0.2, random_state=42)
+    df_train, df_test = train_test_split(datafinal, test_size=0.2, random_state=42)
 
     x_train = df_train.drop(['SalePrice'], axis = 1)
     y_train = df_train['SalePrice']  
