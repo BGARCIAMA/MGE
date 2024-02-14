@@ -19,6 +19,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import GridSearchCV
+from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 from sklearn.compose import ColumnTransformer
@@ -44,7 +45,8 @@ def descargar_datos(data_train,data_test):
     #Une las bases para la base total
     data_total = pd.concat([train_sin_ID, test_sin_ID], axis = 0)
 
-    return data_total
+    data_total.to_csv(data_total, index=False)
+    print(f"Datos preprocesados guardados en {data_total}")
 
 def impute_continuous_missing_data(passed_col):
     '''Completa las variables vacías usando un imputador (apoyándonos del código
@@ -182,5 +184,3 @@ def preprocesar_datos(data_total):
 
     #duda si ponerlo así: 
     data_final.to_csv(base_path_data, index=False)
-
-    return data_final
