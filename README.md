@@ -12,7 +12,19 @@ Este es un repositorio que contiene a detalle los scripts del modelo que permita
 
 # Contenido del repositorio  🎯
 Aqui se incluye el árbol con la estructura de tu repositorio:
-PENDIENTEEEE
+
+├── ./README.md
+├── ./data
+│   └── ./data/raw
+│       ├── ./data/raw/test.csv
+│       └── ./data/raw/train.csv
+├── ./inference.py
+├── ./notebooks
+│   └── ./notebooks/Modelo_Tarea_01.ipynb
+├── ./prep.py
+├── ./src
+│   └── ./src/script.py
+└── ./train.py
 
 # Base de datos  ✍
 Usamos el [conjunto de precios de compra-venta de casas de la ciudad Ames, Iowa en Estados Unidos](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques).
