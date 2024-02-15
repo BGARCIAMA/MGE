@@ -1,4 +1,4 @@
-# Tarea de Métodos de Gran Escala 
+# Métodos de Gran Escala 
 # (MCD ITAM Primavera 2024)         
 
 ## Autor
