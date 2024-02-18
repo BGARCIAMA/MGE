@@ -42,6 +42,9 @@ def descargar_datos(base_path_data, path_out):
     return data_total
 
 def impute_continuous_missing_data(data, missing_data_cols, passed_col):
+    '''Completa las variables vacías usando un imputador (apoyándonos del código
+    https://www.kaggle.com/code/muhammadibrahimqasmi/predicting-house-prices")
+    '''
     df_null = data[data[passed_col].isnull()]
     df_not_null = data[data[passed_col].notnull()]
 
@@ -50,10 +53,12 @@ def impute_continuous_missing_data(data, missing_data_cols, passed_col):
 
     # Transformación de variables categóricas
     label_encoder = LabelEncoder()
-    x_var = x_var.apply(lambda col: label_encoder.fit_transform(col) if col.dtype in ['object', 'category'] else col)
+    x_var = x_var.apply(lambda col: label_encoder.fit_transform(col) if
+                        col.dtype in ['object', 'category'] else col)
 
     # Imputación de valores faltantes
-    iterative_imputer = IterativeImputer(estimator=RandomForestRegressor(random_state=123), add_indicator=True)
+    iterative_imputer = IterativeImputer(estimator = RandomForestRegressor(random_state=123),
+                                         add_indicator=True)
     for col in [col for col in x_var.columns if col in missing_data_cols]:
         if x_var[col].isnull().sum() > 0:
             col_with_missing_values = x_var[col].values.reshape(-1, 1)
@@ -67,7 +72,8 @@ def impute_continuous_missing_data(data, missing_data_cols, passed_col):
 
     # Imputación de valores faltantes en df_null
     x_var = df_null.drop(passed_col, axis=1)
-    x_var = x_var.apply(lambda col: label_encoder.fit_transform(col) if col.dtype in ['object', 'category'] else col)
+    x_var = x_var.apply(lambda col: label_encoder.fit_transform(col)
+                        if col.dtype in ['object', 'category'] else col)
     for col in [col for col in x_var.columns if col in missing_data_cols]:
         if x_var[col].isnull().sum() > 0:
             col_with_missing_values = x_var[col].values.reshape(-1, 1)
@@ -165,7 +171,7 @@ def entrena_modelo(data_final, path_models):
     '''
      # Cargar datos desde el archivo CSV
     data_final = pd.read_csv(data_final)
-    
+
     # Seleccionar características numéricas y eliminar 'SalePrice'
     numerical_cols = data_final.select_dtypes(include=['int64',
                                                        'float64']).drop('SalePrice',

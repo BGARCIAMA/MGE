@@ -2,7 +2,7 @@
 '''Este script prepara los datos para incorporarlos al modelo
     Las funciones dentro de este script son:
     - descargar_datos
-    - impute_continuous_missing_data (dentro de preprocesar_datos) 
+    - impute_continuous_missing_data (dentro de preprocesar_datos)
     - preprocesar_datos
 '''
 # Importa las librerias
