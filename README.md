@@ -13,20 +13,30 @@ Este es un repositorio que contiene a detalle los scripts del modelo que permita
 # Contenido del repositorio  🎯
 Aqui se incluye el árbol con la estructura de tu repositorio:
 
-- [data](./data)
-  - [raw](./data/raw)
-    - [test.csv](./data/raw/test.csv)
-    - [train.csv](./data/raw/train.csv)
+.
+├── [README.md](README.md)
+├── data
+│   ├── prep
+│   │   └── [data_prep.csv](data/prep/data_prep.csv)
+│   └── raw
+│       ├── [data_total.csv](data/raw/data_total.csv)
+│       ├── [test.csv](data/raw/test.csv)
+│       ├── [test.csv:Zone.Identifier](data/raw/test.csv:Zone.Identifier)
+│       ├── [train.csv](data/raw/train.csv)
+│       └── [train.csv:Zone.Identifier](data/raw/train.csv:Zone.Identifier)
+├── [inference.py](inference.py)
+├── models
+│   └── [rfr_model.joblib](models/rfr_model.joblib)
+├── notebooks
+│   └── [Modelo_Tarea_01.ipynb](notebooks/Modelo_Tarea_01.ipynb)
+├── [prep.py](prep.py)
+├── src
+│   ├── pycache
+│   │   ├── [script.cpython-311.pyc](src/pycache/script.cpython-311.pyc)
+│   │   └── [script.cpython-39.pyc](src/pycache/script.cpython-39.pyc)
+│   └── [script.py](src/script.py)
+└── [train.py](train.py)
 
-- [notebooks](./notebooks)
-  - [Modelo_Tarea_01.ipynb](./notebooks/Modelo_Tarea_01.ipynb)
-
-- [src](./src)
-  - [script.py](./src/script.py)
-
-- [inference.py](./inference.py)
-- [prep.py](./prep.py)
-- [train.py](./train.py)
 
 # Base de datos  ✍
 Usamos el [conjunto de precios de compra-venta de casas de la ciudad Ames, Iowa en Estados Unidos](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques).
