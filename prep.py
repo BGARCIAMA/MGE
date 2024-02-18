@@ -2,19 +2,18 @@
 '''Este script prepara los datos para incorporarlos al modelo
     Las funciones dentro de este script son:
     - descargar_datos
-    - impute_continuous_missing_data
+    - impute_continuous_missing_data (dentro de preprocesar_datos) 
     - preprocesar_datos
 '''
 # Importa las librerias
-import pandas as pd
-from src.script import descargar_datos, impute_continuous_missing_data, preprocesar_datos
+from src.script import descargar_datos, preprocesar_datos
+
+BASE_PATH_DATA = "./data/raw/"
+PATH_DATA = "./data/raw/data_total.csv"
+PATH_OUT = "./data/raw/"
 
 #Descarga los datos
-data_total = descargar_datos("data/raw/train.csv","data/raw/test.csv" )
+data_total = descargar_datos(BASE_PATH_DATA, PATH_OUT)
 
 #Preprocesa los datos
-data_final = preprocesar_datos(data_total)
-
-#Guarda los datos
-pd.DataFrame(data_total).to_csv("data/prep/data_total.csv", index=False)
-pd.DataFrame(data_final).to_csv("data/prep/data_final.csv", index=False)
+data_final = preprocesar_datos(PATH_DATA, BASE_PATH_OUT_PREP="data/prep/data_prep.csv")

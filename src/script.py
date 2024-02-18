@@ -2,26 +2,22 @@
 '''Funciones que luego puedas importar a tu código principal
     (prep.py, train.py, inference.py)
 '''
-# Importa librerías
-import locale
-import joblib
-import pandas as pd
+# Se importan las librerias necesarias
 import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+import pandas as pd
+import joblib
+import locale
+import warnings
 from sklearn.impute import IterativeImputer
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import LabelEncoder
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
 
-# Path del repo
-BASE_PATH_DATA = "./data/raw"
-BASE_PATH_OUT = "./data/prep"
-
-def descargar_datos(data_train,data_test):
+def descargar_datos(BASE_PATH_DATA, PATH_OUT):
     '''Descaga la info que vendrá de CSV del data raw
     Params:
         data_train: informacion del dataset de entrenamiento
@@ -40,8 +36,9 @@ def descargar_datos(data_train,data_test):
     #Une las bases para la base total
     data_total = pd.concat([train_sin_id, test_sin_id], axis = 0)
 
-    data_total.to_csv(f"{BASE_PATH_OUT}/data_total.csv", index=False)
-    print(f"Datos preprocesados guardados en {BASE_PATH_OUT}/total_data.csv")
+    data_total.to_csv(f"{PATH_OUT}/data_total.csv", index=False)
+    print(f"Datos unidos guardados en {PATH_OUT}")
+    return data_total
 
 def impute_continuous_missing_data(data, missing_data_cols, passed_col):
     '''Completa las variables vacías usando un imputador (apoyándonos del código
@@ -112,10 +109,6 @@ def impute_continuous_missing_data(data, missing_data_cols, passed_col):
     rf_regressor.fit(X_train, y_train)
     y_pred = rf_regressor.predict(X_test)
 
-    print("MAE =", mean_absolute_error(y_test, y_pred), "\n")
-    print("RMSE =", mean_squared_error(y_test, y_pred, squared=False), "\n")
-    print("R2 =", r2_score(y_test, y_pred), "\n")
-
     X = df_null.drop(passed_col, axis=1)
 
     for col in X.columns:
@@ -139,7 +132,7 @@ def impute_continuous_missing_data(data, missing_data_cols, passed_col):
 
     return df_combined[passed_col]
 
-def preprocesar_datos(data_total):
+def preprocesar_datos(entrada_data, BASE_PATH_OUT_PREP):
     '''Trabaja en la base total para preprocesar
     Params:
         data_total: base completa para prepocesar las variables para modelo
@@ -183,6 +176,9 @@ def preprocesar_datos(data_total):
     'MoSold',
     'YrSold',
     'SalePrice']
+    
+    # Cargar datos desde el archivo CSV
+    data_total = pd.read_csv(entrada_data)
 
     #Quita variables con muchos missings
     var_sin_miss = data_total.drop(['PoolQC', 'MiscFeature', 'Alley', 'Fence', 'FireplaceQu'],
@@ -191,30 +187,32 @@ def preprocesar_datos(data_total):
     #Se queda con variables numericas solamente
     var_modelo = var_sin_miss.select_dtypes(include = ['float64', 'int64'])
 
-
     #Elimina filas y columas duplicadas
     var_modelo = var_modelo.drop_duplicates()
     var_modelo = var_modelo.reset_index(drop = True)
 
-    import warnings
     warnings.filterwarnings('ignore')
     missing_data_cols = var_modelo.isnull().sum()[var_modelo.isnull().sum() > 0].index.tolist()
 
     # Imputamos informacioón en valores vacíos con nuestras funciones
     for col in missing_data_cols :
-        print("Missing Values", col, ":", str(round((
-            var_modelo[col].isnull().sum()/len(var_modelo))*100, 2))+"%")
         if col in numeric_cols:
-            var_modelo[col] = impute_continuous_missing_data(col)
+            var_modelo[col] = impute_continuous_missing_data(data_total, missing_data_cols, col)
         else:
             pass
 
     data_final = var_modelo[['OverallQual', 'YearBuilt', 'YearRemodAdd', 'LotFrontage',
                             'TotalBsmtSF', 'GrLivArea', 'GarageArea', 'SalePrice']]
 
-def entrena_modelo(data_final):
+    # Guardar el resultado en un nuevo archivo CSV
+    data_final.to_csv(BASE_PATH_OUT_PREP, index=False)
+    print(f"La base preprocesada se guardo en {BASE_PATH_OUT_PREP}")
+    return data_final
 
-    # Entrenamos el modelo
+def entrena_modelo(data_final, PATH_MODELS):
+    '''Entrena el modelo con la base de datos final'''
+    # Cargar datos desde el archivo CSV
+    data_final = pd.read_csv(data_final)
     # Seleccionar características numéricas y eliminar 'SalePrice'
     numerical_cols = data_final.select_dtypes(include =
                                               ['int64', 'float64']).drop('SalePrice',
@@ -251,9 +249,6 @@ def entrena_modelo(data_final):
         rmse = np.sqrt(mean_squared_error(y_test, predictions))
         rmse_results[name] = rmse
 
-    # Mostrar los RMSE resultantes
-    rmse_results_sorted = dict(sorted(rmse_results.items(), key=lambda item: item[1]))
-
     # Se dividen las bases
     df_train, df_test = train_test_split(data_final, test_size=0.2, random_state=42)
 
@@ -264,16 +259,13 @@ def entrena_modelo(data_final):
     RFR_model = RandomForestRegressor()
     RFR_model.fit(x_train, y_train)
 
-    # Se hace la predicción en la base test usando el modelo entrenado
-    y_pred = RFR_model.predict(df_test.drop(['SalePrice'], axis = 1))
-
-    joblib.dump(RFR_model, "./rfr_model.joblib")
+    joblib.dump(RFR_model, "./models/rfr_model.joblib")
+    print(f"El modelo fue entrenado y guardado en {PATH_MODELS}")
 
 def prediccion_precio():
     # Definir las variables necesarias para la predicción
     variables = ['OverallQual', 'YearBuilt', 'YearRemodAdd',
                 'LotFrontage','TotalBsmtSF', 'GrLivArea', 'GarageArea']
-    locale.setlocale(locale.LC_ALL, '')
 
     # Solicitar al usuario ingresar las variables de entrada
     print("Ingrese los valores de las variables para predecir el precio de la casa:")
@@ -299,11 +291,10 @@ def prediccion_precio():
     input_data = pd.DataFrame(user_input, columns = variables)
 
     # Cargar el modelo previamente entrenado
-    loaded_rfr = joblib.load("./rfr_model.joblib")
+    loaded_rfr = joblib.load("./models/rfr_model.joblib")
 
     # Resultado del modelo
     prediction = loaded_rfr.predict(input_data)
-    prediction_formateada = locale.currency(prediction[0], grouping=True)
 
     # La predicción es:
-    print(f'El precio estimado de la casa es: {prediction_formateada}')
+    print(f'El precio estimado de la casa es: {prediction}')
