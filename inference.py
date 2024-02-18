@@ -6,7 +6,7 @@
 #Importa las librerias
 import pandas as pd
 import joblib
-from src import script
+from src.script import prediccion_precio
 
 # Realiza las predicciones
-y_pred = script.prediccion_precio()
+y_pred = prediccion_precio()
