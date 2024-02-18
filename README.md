@@ -13,28 +13,30 @@ Este es un repositorio que contiene a detalle los scripts del modelo que permita
 # Contenido del repositorio  🎯
 Aqui se incluye el árbol con la estructura de tu repositorio:
 
-  ├── README.md
+.
+├── README.md
 ├── data
-│   ├── prep
-│   │   └── data_prep.csv
-│   └── raw
-│       ├── data_total.csv
-│       ├── test.csv
-│       ├── test.csv:Zone.Identifier
-│       ├── train.csv
-│       └── train.csv:Zone.Identifier
+│   ├── prep
+│   │   └── data_prep.csv
+│   └── raw
+│       ├── data_total.csv
+│       ├── test.csv
+│       ├── test.csv:Zone.Identifier
+│       ├── train.csv
+│       └── train.csv:Zone.Identifier
 ├── inference.py
 ├── models
-│   └── rfr_model.joblib
+│   └── rfr_model.joblib
 ├── notebooks
-│   └── Modelo_Tarea_01.ipynb
+│   └── Modelo_Tarea_01.ipynb
 ├── prep.py
 ├── src
-│   ├── __pycache__
-│   │   ├── script.cpython-311.pyc
-│   │   └── script.cpython-39.pyc
-│   └── script.py
+│   ├── pycache
+│   │   ├── script.cpython-311.pyc
+│   │   └── script.cpython-39.pyc
+│   └── script.py
 └── train.py
+
 
 # Base de datos  ✍
 Usamos el [conjunto de precios de compra-venta de casas de la ciudad Ames, Iowa en Estados Unidos](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques).
