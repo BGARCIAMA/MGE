@@ -14,7 +14,6 @@
 # Preprocesa los datos
 # data_final = preprocesar_datos(PATH_DATA, BASE_PATH_OUT_PREP)
 
-
 # -------------
 # prep.py
 '''Este script prepara los datos para incorporarlos al modelo
@@ -28,21 +27,22 @@ from src.script import descargar_datos, preprocesar_datos
 
 
 def parse_arguments():
+    '''Parsea los argumentos de la línea de comandos'''
     parser = argparse.ArgumentParser(description='Preprocesamiento de datos')
-    parser.add_argument('--base_path_data', 
+    parser.add_argument('--base_path_data',
                         type=str, default="./data/raw/",
                         help='Ruta base de los datos crudos')
-    parser.add_argument('--path_out', 
+    parser.add_argument('--path_out',
                         type=str, default="./data/raw/",
-                        help='Ruta de salida para guardar los datos descargados')
-    parser.add_argument('--path_data', 
+                        help='Ruta para guardar los datos descargados')
+    parser.add_argument('--path_data',
                         type=str, default="./data/raw/data_total.csv",
                         help='Ruta del archivo CSV de entrada')
-    parser.add_argument('--base_path_out_prep', 
+    parser.add_argument('--base_path_out_prep',
                         type=str, default="data/prep/data_prep.csv",
-                        help='Ruta de salida para guardar los datos preprocesados')
-    args = parser.parse_args()
-    return args
+                        help='Ruta para guardar los datos preprocesados')
+    parsed_args = parser.parse_args()
+    return parsed_args
 
 
 if __name__ == "__main__":

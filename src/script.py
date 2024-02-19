@@ -4,8 +4,8 @@
 '''
 # Se importan las librerias necesarias
 # pylint: disable = unused-import
-import yaml 
 import warnings
+import yaml
 import numpy as np
 import pandas as pd
 import joblib
@@ -21,6 +21,9 @@ from sklearn.impute import IterativeImputer
 
 
 def cargar_configuracion(ruta_config):
+    '''De aqui se obtiene la configuracion del
+    config.yaml
+    '''
     with open(ruta_config, 'r') as archivo:
         configuracion = yaml.safe_load(archivo)
     return configuracion
@@ -198,7 +201,10 @@ def entrena_modelo(data_final, path_models, configuracion):
     data_final = pd.read_csv(data_final)
 
     # Seleccionar características numéricas y eliminar 'SalePrice'
-    numerical_cols = data_final.select_dtypes(include=['int64', 'float64']).drop('SalePrice', axis=1).columns
+    numerical_cols = (data_final
+                      .select_dtypes(include=['int64', 'float64'])
+                      .drop('SalePrice', axis=1) .drop('SalePrice', axis=1)
+                      .columns)
     numerical_transformer = StandardScaler()
 
     preprocessor = ColumnTransformer(
@@ -206,14 +212,13 @@ def entrena_modelo(data_final, path_models, configuracion):
             ('num', numerical_transformer, numerical_cols)
         ])
 
+    # Obtener los parámetros del diccionario de configuración
+    rf_params = configuracion['random_forest']
+
+    # Crear la lista de modelos
     model_list = {
-        'Linear Regression': LinearRegression(),
-        'Random Forest Regression': RandomForestRegressor(
-            n_estimators=configuracion['random_forest']['n_trees'],
-            max_depth=configuracion['random_forest']['max_depth'],
-            min_samples_split=configuracion['random_forest']['min_samples_split'],
-            random_state=configuracion['random_forest']['random_seed']
-        )
+                  'Linear Regression': LinearRegression(),
+                  'RFR': RandomForestRegressor(**rf_params)
     }
 
     x_model = data_final.drop('SalePrice', axis=1)
@@ -223,8 +228,8 @@ def entrena_modelo(data_final, path_models, configuracion):
                                                         random_state=123)
 
     pipelines = {name: Pipeline(steps=[('preprocessor', preprocessor),
-                                        ('model', model)]) for name,
-                                        model in model_list.items()}
+                                       ('model', model)]) for name,
+                 model in model_list.items()}
 
     rmse_results = {}
 
@@ -244,9 +249,9 @@ def entrena_modelo(data_final, path_models, configuracion):
 
     joblib.dump(rfr_model, f"{path_models}/rfr_model.joblib")
     print(f"El modelo fue entrenado y guardado en {path_models}")
- 
 
-def prediccion_precio(input_data, model_file):
+
+def prediccion_precio(input_data):
     '''Con los input que ingrese el usuario, se predice el
     precio de la casa con esas especificaciones
     '''
