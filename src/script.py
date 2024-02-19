@@ -4,6 +4,7 @@
 '''
 # Se importan las librerias necesarias
 # pylint: disable = unused-import
+import yaml 
 import warnings
 import numpy as np
 import pandas as pd
@@ -17,6 +18,12 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 from sklearn.experimental import enable_iterative_imputer  # noqa
 from sklearn.impute import IterativeImputer
+
+
+def cargar_configuracion(ruta_config):
+    with open(ruta_config, 'r') as archivo:
+        configuracion = yaml.safe_load(archivo)
+    return configuracion
 
 
 def descargar_datos(base_path_data, path_out):
@@ -182,18 +189,16 @@ def preprocesar_datos(entrada_data, base_path_out_prep):
     return data_final
 
 
-def entrena_modelo(data_final, path_models):
+def entrena_modelo(data_final, path_models, configuracion):
     '''Con la información ya preprocesada de data_final
     entrena el modelo
     '''
-    # Cargar datos desde el archivo CSV
+
+    # Lee csv
     data_final = pd.read_csv(data_final)
 
     # Seleccionar características numéricas y eliminar 'SalePrice'
-    numerical_cols = data_final.select_dtypes(include=['int64',
-                                                       'float64']
-                                              ).drop('SalePrice',
-                                                     axis=1).columns
+    numerical_cols = data_final.select_dtypes(include=['int64', 'float64']).drop('SalePrice', axis=1).columns
     numerical_transformer = StandardScaler()
 
     preprocessor = ColumnTransformer(
@@ -203,7 +208,12 @@ def entrena_modelo(data_final, path_models):
 
     model_list = {
         'Linear Regression': LinearRegression(),
-        'Random Forest Regression': RandomForestRegressor()
+        'Random Forest Regression': RandomForestRegressor(
+            n_estimators=configuracion['random_forest']['n_trees'],
+            max_depth=configuracion['random_forest']['max_depth'],
+            min_samples_split=configuracion['random_forest']['min_samples_split'],
+            random_state=configuracion['random_forest']['random_seed']
+        )
     }
 
     x_model = data_final.drop('SalePrice', axis=1)
@@ -212,11 +222,9 @@ def entrena_modelo(data_final, path_models):
                                                         y_model, test_size=0.2,
                                                         random_state=123)
 
-    pipelines = {
-        name: Pipeline(steps=[('preprocessor', preprocessor),
-                              ('model', model)])
-        for name, model in model_list.items()
-    }
+    pipelines = {name: Pipeline(steps=[('preprocessor', preprocessor),
+                                        ('model', model)]) for name,
+                                        model in model_list.items()}
 
     rmse_results = {}
 
@@ -226,14 +234,19 @@ def entrena_modelo(data_final, path_models):
         rmse = np.sqrt(mean_squared_error(y_test, predictions))
         rmse_results[name] = rmse
 
-    rfr_model = RandomForestRegressor()
+    rfr_model = RandomForestRegressor(
+        n_estimators=configuracion['random_forest']['n_trees'],
+        max_depth=configuracion['random_forest']['max_depth'],
+        min_samples_split=configuracion['random_forest']['min_samples_split'],
+        random_state=configuracion['random_forest']['random_seed']
+    )
     rfr_model.fit(x_train, y_train)
 
     joblib.dump(rfr_model, f"{path_models}/rfr_model.joblib")
     print(f"El modelo fue entrenado y guardado en {path_models}")
+ 
 
-
-def prediccion_precio():
+def prediccion_precio(input_data, model_file):
     '''Con los input que ingrese el usuario, se predice el
     precio de la casa con esas especificaciones
     '''
@@ -272,3 +285,7 @@ def prediccion_precio():
 
     # La predicción es:
     print(f'El precio estimado de la casa es: {prediction}')
+
+
+# Utiliza la configuración en las funciones
+descargar_datos("./data/raw/", "./data/raw/")

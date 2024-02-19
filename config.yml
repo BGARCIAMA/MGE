@@ -1,0 +1,9 @@
+# config.yml
+
+# Hiperparámetros del mejor modelo (ejemplo con Random Forest)
+random_forest:
+  n_trees: 100            # Número de árboles
+  max_depth: 10           # Máxima profundidad de los árboles
+  min_samples_split: 2    # Mínimo de muestras para partir un nodo
+  random_seed: 42         # Semilla para reproducibilidad
+  
