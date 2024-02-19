@@ -3,7 +3,7 @@
     Las funciones dentro de este script son:
     - prediccion_precio
 '''
-#Importa las librerias
+# Importa las librerias
 from src.script import prediccion_precio
 
 # Realiza las predicciones
