@@ -12,6 +12,7 @@ Este es un repositorio que contiene a detalle los scripts del modelo que permita
 
 # Contenido del repositorio  🎯
 Aqui se incluye el árbol con la estructura de tu repositorio:
+```
 .
 ├── README.md
 ├── data
@@ -35,6 +36,7 @@ Aqui se incluye el árbol con la estructura de tu repositorio:
 │ │ └── script.cpython-39.pyc
 │ └── script.py
 └── train.py
+```
 
 # Base de datos  ✍
 Usamos el [conjunto de precios de compra-venta de casas de la ciudad Ames, Iowa en Estados Unidos](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques).
