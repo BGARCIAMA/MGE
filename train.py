@@ -3,10 +3,10 @@
     Las funciones dentro de este script son:
     - entrena_modelo
 '''
-#Importa las librerias
+# Importa las librerias
 from src.script import entrena_modelo
 
-PATH_PREP ="data/prep/data_prep.csv"
+PATH_PREP = "data/prep/data_prep.csv"
 PATH_MODELS = "./models"
 
 # Entrena el modelo
