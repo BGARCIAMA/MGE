@@ -15,25 +15,25 @@ Aqui se incluye el árbol con la estructura de tu repositorio:
 .
 ├── README.md
 ├── data
-│   ├── prep
-│   │   └── data_prep.csv
-│   └── raw
-│       ├── data_total.csv
-│       ├── test.csv
-│       ├── test.csv:Zone.Identifier
-│       ├── train.csv
-│       └── train.csv:Zone.Identifier
+│ ├── prep
+│ │ └── data_prep.csv
+│ └── raw
+│ ├── data_total.csv
+│ ├── test.csv
+│ ├── test.csv:Zone.Identifier
+│ ├── train.csv
+│ └── train.csv:Zone.Identifier
 ├── inference.py
 ├── models
-│   └── rfr_model.joblib
+│ └── rfr_model.joblib
 ├── notebooks
-│   └── Modelo_Tarea_01.ipynb
+│ └── Modelo_Tarea_01.ipynb
 ├── prep.py
 ├── src
-│   ├── pycache
-│   │   ├── script.cpython-311.pyc
-│   │   └── script.cpython-39.pyc
-│   └── script.py
+│ ├── pycache
+│ │ ├── script.cpython-311.pyc
+│ │ └── script.cpython-39.pyc
+│ └── script.py
 └── train.py
 
 # Base de datos  ✍
