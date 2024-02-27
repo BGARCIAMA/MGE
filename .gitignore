@@ -1,0 +1,10 @@
+# Se agregan los archivos que se ignoran por defecto en el repositorio
+.pytest_cache/
+data/prep/data_prep.csv
+data/raw/data_total.csv
+data/raw/test.csv
+data/raw/train.csv
+data/raw/test.csv:Zone.Identifier
+data/raw/train.csv:Zone.Identifier
+src/__pycache__/
+config.yml

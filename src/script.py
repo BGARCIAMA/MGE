@@ -154,9 +154,13 @@ def preprocesar_datos(entrada_data, base_path_out_prep):
     # Cargar datos desde el archivo CSV
     data_total = pd.read_csv(entrada_data)
 
-    # Quita variables con muchos missings
-    var_sin_miss = data_total.drop(['PoolQC', 'MiscFeature', 'Alley',
-                                    'Fence', 'FireplaceQu'], axis=1)
+    # Columnas a eliminar
+    cols_to_drop = ['PoolQC', 'MiscFeature', 'Alley', 'Fence', 'FireplaceQu']
+
+    # Solo eliminar las columnas si existen en el DataFrame
+    cols_to_drop = [col for col in cols_to_drop if col in data_total.columns]
+
+    var_sin_miss = data_total.drop(cols_to_drop, axis=1)
 
     # Se queda con variables numericas solamente
     var_modelo = var_sin_miss.select_dtypes(include=['float64', 'int64'])
