@@ -1,9 +1,19 @@
+'''
+Este script contiene las pruebas unitarias
+para la función preprocesar_datos del script
+script.py
+'''
+import os
 import pandas as pd
 import numpy as np
-import os
 from script import preprocesar_datos
 
+
 def test_preprocesar_datos():
+    '''
+    Esta función prueba la función
+    preprocesar_datos del script.py
+    '''
     # Crear datos de prueba
     entrada_data = "test_data.csv"
     base_path_out_prep = "preprocessed_data.csv"
@@ -60,8 +70,10 @@ def test_preprocesar_datos():
     assert len(data_final.columns) == 8
 
     # Verificar que las columnas sean correctas
-    expected_columns = ['OverallQual', 'YearBuilt', 'YearRemodAdd', 'LotFrontage',
-                        'TotalBsmtSF', 'GrLivArea', 'GarageArea', 'SalePrice']
+    expected_columns = ['OverallQual', 'YearBuilt',
+                        'YearRemodAdd', 'LotFrontage',
+                        'TotalBsmtSF', 'GrLivArea',
+                        'GarageArea', 'SalePrice']
     assert all(col in data_final.columns for col in expected_columns)
 
     # Verificar que el número de filas sea correcto
