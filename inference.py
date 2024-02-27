@@ -16,6 +16,7 @@ import os
 import argparse
 import logging
 from datetime import datetime
+import pandas as pd
 from src.script import prediccion_precio
 
 
@@ -46,9 +47,29 @@ def parse_arguments():
 
 
 if __name__ == "__main__":
-    logging.info("Inicio del script de predicción.")
-    args = parse_arguments()
+    try:
+        logging.info("Inicio del script de predicción.")
+        args = parse_arguments()
 
-    # Realiza las predicciones
-    prediccion_precio(args.input_data)  # Pasa el argumento 'input_data'
-    logging.info("Predicciones realizadas.")
+        # Carga los datos
+        try:
+            data = pd.read_csv(args.input_data)
+            logging.debug("Número de filas en el dataset de entrada: "
+                          "%d", len(data))
+            logging.debug("Número de columnas en el dataset de entrada: "
+                          "%d", len(data.columns))
+            logging.debug("Path de entrada: %s", args.input_data)
+        except pd.errors.EmptyDataError:
+            logging.error("El archivo CSV está vacío.")
+            raise
+        except FileNotFoundError:
+            logging.error("No se encontró el archivo CSV.")
+            raise
+
+        # Realiza las predicciones
+        prediccion_precio(args.input_data)  # Pasa el argumento 'input_data'
+        logging.info("Predicciones realizadas.")
+    except Exception as e:
+        logging.error("Error en el script de predicción.")
+        logging.error(e, exc_info=True)
+        raise

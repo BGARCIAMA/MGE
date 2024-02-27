@@ -1,0 +1,5 @@
+root - INFO - Inicio del script de entrenamiento.
+root - DEBUG - Número de filas en el dataset de entrada: 2919
+root - DEBUG - Número de columnas en el dataset de entrada: 8
+root - DEBUG - Path de entrada: data/prep/data_prep.csv
+root - INFO - Finalizo el script de entrenamiento.

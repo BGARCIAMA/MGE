@@ -15,7 +15,7 @@
 # data_final = preprocesar_datos(PATH_DATA, BASE_PATH_OUT_PREP)
 
 # -------------
-## prep.py
+# prep.py
 '''Este script prepara los datos para incorporarlos al modelo
     Las funciones dentro de este script son:
     - descargar_datos
@@ -78,7 +78,8 @@ if __name__ == "__main__":
 
         data_total = descargar_datos(args.base_path_data, args.path_out)
 
-        logging.debug("Número de filas en el dataset de entrada: %d", len(data_total))
+        logging.debug("Número de filas en el dataset de entrada: "
+                      "%d", len(data_total))
         logging.debug("Path de entrada: %s", args.path_data)
         logging.info("Datos descargados.")
 

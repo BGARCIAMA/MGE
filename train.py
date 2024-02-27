@@ -21,8 +21,8 @@ import os
 import argparse
 import logging
 from datetime import datetime
+import pandas as pd
 from src.script import entrena_modelo, cargar_configuracion
-
 
 if not os.path.exists("logs/"):
     os.makedirs("logs/")
@@ -52,12 +52,31 @@ def parse_arguments():
 
 
 if __name__ == "__main__":
-    logging.info("Inicio del script de entrenamiento.")
-    
-    args = parse_arguments()
-    configuracion = cargar_configuracion(args.config_file)
+    try:
+        logging.info("Inicio del script de entrenamiento.")
+        args = parse_arguments()
+        configuracion = cargar_configuracion(args.config_file)
 
-    # Entrena el modelo
-    entrena_modelo(args.path_prep, args.path_models, configuracion)
+        # Carga los datos
+        try:
+            data = pd.read_csv(args.path_prep)
+            logging.debug("Número de filas en el dataset de entrada: "
+                          "%d", len(data))
+            logging.debug("Número de columnas en el dataset de entrada: "
+                          "%d", len(data.columns))
+            logging.debug("Path de entrada: %s", args.path_prep)
+        except pd.errors.EmptyDataError:
+            logging.error("El archivo CSV está vacío.")
+            raise
+        except FileNotFoundError:
+            logging.error("No se encontró el archivo CSV.")
+            raise
 
-    logging.info("Finalizo el script de entrenamiento.")
+        # Entrena el modelo
+        entrena_modelo(args.path_prep, args.path_models, configuracion)
+
+        logging.info("Finalizo el script de entrenamiento.")
+    except Exception as e:
+        logging.error("Error en el script de entrenamiento.")
+        logging.error(e, exc_info=True)
+        raise
