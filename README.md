@@ -14,28 +14,25 @@ Este es un repositorio que contiene a detalle los scripts del modelo que permita
 Aqui se incluye el árbol con la estructura de tu repositorio:
 ```
 .
-├── README.md
-├── data
-│ ├── prep
-│ │ └── data_prep.csv
-│ └── raw
-│ ├── data_total.csv
-│ ├── test.csv
-│ ├── test.csv:Zone.Identifier
-│ ├── train.csv
-│ └── train.csv:Zone.Identifier
-├── inference.py
-├── models
-│ └── rfr_model.joblib
-├── notebooks
-│ └── Modelo_Tarea_01.ipynb
-├── prep.py
-├── src
-│ ├── pycache
-│ │ ├── script.cpython-311.pyc
-│ │ └── script.cpython-39.pyc
-│ └── script.py
-└── train.py
+├── ./README.md
+├── ./data
+│   ├── ./data/prep
+│   └── ./data/raw
+├── ./environment.yml
+├── ./inference.py
+├── ./logs
+│   ├── ./logs/20240226_200042_train.log
+│   ├── ./logs/20240226_200310_train.log
+│   └── ./logs/20240226_200520_inference.log
+├── ./models
+│   └── ./models/rfr_model.joblib
+├── ./notebooks
+│   └── ./notebooks/Modelo_Tarea_01.ipynb
+├── ./prep.py
+├── ./src
+│   ├── ./src/script.py
+│   └── ./src/test_script.py
+└── ./train.py
 ```
 
 # Base de datos  ✍
@@ -123,3 +120,25 @@ La base contiene 80 variables descritas a continuación:
 - YrSold: Year Sold
 - SaleType: Type of sale
 - SaleCondition: Condition of sale
+
+# Test
+
+Para correr el test del script se requiere correr la siguiente línea en la terminal:
+
+```bash
+pytest src/test_script.py
+```
+
+Arroja el siguiente resultado:
+```bash
+pytest src/test_script.py
+================================================== test session starts ===================================================
+platform darwin -- Python 3.11.8, pytest-8.0.1, pluggy-1.4.0
+rootdir: /Users/blancagarcia/Documents/2do_Sem/MGE/MGE_Tarea03
+plugins: anyio-4.3.0
+collected 1 item
+
+src/test_script.py .                                                                                               [100%]
+
+=================================================== 1 passed in 0.50s ====================================================
+```
