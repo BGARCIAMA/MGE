@@ -9,6 +9,7 @@ import yaml
 import numpy as np
 import pandas as pd
 import joblib
+import logging
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
@@ -24,7 +25,7 @@ def cargar_configuracion(ruta_config):
     '''De aqui se obtiene la configuracion del
     config.yaml
     '''
-    with open(ruta_config, 'r') as archivo:
+    with open(ruta_config, 'r', encoding='utf-8') as archivo:
         configuracion = yaml.safe_load(archivo)
     return configuracion
 
@@ -55,7 +56,8 @@ def descargar_datos(base_path_data, path_out):
 
 
 def impute_continuous_missing_data(data, missing_data_cols, passed_col):
-    '''Completa las variables vacías usando un imputador (apoyándonos del código
+    '''Completa las variables vacías usando
+    un imputador (apoyándonos del código
     https://www.kaggle.com/code/muhammadibrahimqasmi/predicting-house-prices")
     '''
     df_null = data[data[passed_col].isnull()]
@@ -203,7 +205,7 @@ def entrena_modelo(data_final, path_models, configuracion):
     # Seleccionar características numéricas y eliminar 'SalePrice'
     numerical_cols = (data_final
                       .select_dtypes(include=['int64', 'float64'])
-                      .drop('SalePrice', axis=1) .drop('SalePrice', axis=1)
+                      .drop('SalePrice', axis=1)
                       .columns)
     numerical_transformer = StandardScaler()
 
@@ -218,7 +220,8 @@ def entrena_modelo(data_final, path_models, configuracion):
     # Crear la lista de modelos
     model_list = {
                   'Linear Regression': LinearRegression(),
-                  'RFR': RandomForestRegressor(**rf_params)
+                  'RFR': RandomForestRegressor(
+                      n_estimators=rf_params['n_estimators'],)
     }
 
     x_model = data_final.drop('SalePrice', axis=1)
@@ -240,7 +243,7 @@ def entrena_modelo(data_final, path_models, configuracion):
         rmse_results[name] = rmse
 
     rfr_model = RandomForestRegressor(
-        n_estimators=configuracion['random_forest']['n_trees'],
+        n_estimators=configuracion['random_forest']['n_estimators'],
         max_depth=configuracion['random_forest']['max_depth'],
         min_samples_split=configuracion['random_forest']['min_samples_split'],
         random_state=configuracion['random_forest']['random_seed']

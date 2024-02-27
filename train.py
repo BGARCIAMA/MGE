@@ -17,8 +17,24 @@
     Las funciones dentro de este script son:
     - entrena_modelo
 '''
+import os
 import argparse
+import logging
+from datetime import datetime
 from src.script import entrena_modelo, cargar_configuracion
+
+
+if not os.path.exists("logs/"):
+    os.makedirs("logs/")
+# Setup Logging
+now = datetime.now()
+date_time = now.strftime("%Y%m%d_%H%M%S")
+log_train_file_name = f"logs/{date_time}_train.log"
+logging.basicConfig(
+    filename=log_train_file_name,
+    level=logging.DEBUG,
+    filemode='w',
+    format='%(name)s - %(levelname)s - %(message)s')
 
 
 def parse_arguments():
@@ -36,8 +52,12 @@ def parse_arguments():
 
 
 if __name__ == "__main__":
+    logging.info("Inicio del script de entrenamiento.")
+    
     args = parse_arguments()
     configuracion = cargar_configuracion(args.config_file)
 
     # Entrena el modelo
     entrena_modelo(args.path_prep, args.path_models, configuracion)
+
+    logging.info("Finalizo el script de entrenamiento.")
