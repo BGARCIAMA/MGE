@@ -144,6 +144,4 @@ src/test_script.py .                                                            
 ```
 
 # Arquitectura
-
-
-
+![Arquitectura](./Arquitectura.png)
